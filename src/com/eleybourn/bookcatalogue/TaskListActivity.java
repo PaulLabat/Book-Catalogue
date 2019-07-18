@@ -84,7 +84,7 @@ public class TaskListActivity extends BindableItemListActivity {
 			if (savedInstanceState == null)
 				HintManager.displayHint(this, R.string.hint_background_tasks, null);
 
-			Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);
+
 		} catch (Exception e) {
 			Logger.logError(e);
 		}
@@ -107,7 +107,7 @@ public class TaskListActivity extends BindableItemListActivity {
 	protected void onResume() {
 		super.onResume();
 		refreshData();
-		Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);		
+
 	} 
 
 	/**

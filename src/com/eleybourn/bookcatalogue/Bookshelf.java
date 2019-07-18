@@ -97,7 +97,7 @@ public class Bookshelf extends BookCatalogueListActivity {
 		mDbHelper.open();
 		fillBookshelves();
 		registerForContextMenu(getListView());
-		Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);
+
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class Bookshelf extends BookCatalogueListActivity {
 	@Override 
 	public void onResume() {
 		super.onResume();
-		Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);		
+
 	}
 
 	private void fillBookshelves() {

@@ -19,7 +19,7 @@
 /gradlew
 /gradlew.bat
 /gradle
-
+captures/
 
 # Specific API
 src/com/eleybourn/bookcatalogue/goodreads/GoodreadsApiKeys.java

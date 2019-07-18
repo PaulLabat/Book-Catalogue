@@ -192,7 +192,7 @@ public class OtherPreferences extends PreferencesBase {
 		updateLanguageListItems();
 
 		setTitle(R.string.other_preferences);
-		Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);
+
 	}
 
 	@Override
@@ -210,7 +210,7 @@ public class OtherPreferences extends PreferencesBase {
 		super.onResume();
 		// Listen for locale changes (this activity CAN change it)
 		BookCatalogueApp.registerOnLocaleChangedListener(mLocaleListener);
-		Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);
+
 	}
 
 	/**

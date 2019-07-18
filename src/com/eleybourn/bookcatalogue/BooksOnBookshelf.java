@@ -524,7 +524,7 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 
 	/**
 	 * Set the listview background based on user preferences
-	 */
+	 *//*
 	private void initBackground() {
 		ListView lv = getListView();
 		View root = findViewById(R.id.root);
@@ -570,16 +570,14 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 			if (Build.VERSION.SDK_INT >= 11) {
 				// Honeycomb
 				lv.setBackgroundDrawable(d);
-//				lv.setBackgroundDrawable(Utils.cleanupTiledBackground(getResources().getDrawable(R.drawable.bc_background_gradient_dim)));
 			} else {
 				lv.setBackgroundColor(0x00000000);				
 			}
 			root.setBackgroundDrawable(d);
-//			root.setBackgroundDrawable(Utils.cleanupTiledBackground(getResources().getDrawable(R.drawable.bc_background_gradient_dim)));
 			header.setBackgroundColor(0x00000000);
 		}
 		root.invalidate();
-	}
+	}*/
 	
 	/**
 	 * Fix background
@@ -595,8 +593,6 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 		// is the call occurs after Activity is destroyed.
 		if (mIsDead) 
 			return;
-
-		initBackground();		
 		Tracker.exitOnResume(this);
 	}
 
@@ -612,8 +608,6 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 		}
 
 		final int showHeaderFlags = (mCurrentStyle == null ? BooklistStyle.SUMMARY_SHOW_ALL : mCurrentStyle.getShowHeaderInfo());
-
-		initBackground();
 
 		TextView bookCounts = (TextView)findViewById(R.id.bookshelf_count);
 		if ( (showHeaderFlags & BooklistStyle.SUMMARY_SHOW_COUNT) != 0) {
@@ -1073,14 +1067,14 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 		
 		return super.onPrepareOptionsMenu(menu);
 	}
+
 	/**
 	 * This will be called when a menu item is selected. A large switch statement to
-	 * call the appropriate functions (or other activities) 
+	 * call the appropriate functions (or other activities)
 	 */
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		if (mMenuHandler != null && !mMenuHandler.onMenuItemSelected(this, featureId, item)) {
-			switch(item.getItemId()) {
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()) {
 
 			case MNU_SORT:
 				HintManager.displayHint(this, R.string.hint_booklist_style_menu, new Runnable() {
@@ -1103,7 +1097,7 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 					mList.getBuilder().expandAll(true);
 					mTopRow = mList.getBuilder().getPosition(oldAbsPos);
 					BooklistPseudoCursor newList = mList.getBuilder().getList();
-					displayList(newList, null);							
+					displayList(newList, null);
 				}
 				break;
 			}
@@ -1115,7 +1109,7 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 					savePosition();
 					mList.getBuilder().expandAll(false);
 					mTopRow = mList.getBuilder().getPosition(oldAbsPos);
-					displayList(mList.getBuilder().getList(), null);												
+					displayList(mList.getBuilder().getList(), null);
 				}
 				break;
 			}
@@ -1145,10 +1139,9 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 				createBookISBN("name");
 				return true;
 			*/
-			}			
 		}
-		
-		return super.onMenuItemSelected(featureId, item);
+
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**

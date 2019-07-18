@@ -298,8 +298,6 @@ public abstract class BookDetailsAbstract extends BookEditFragmentAbstract {
 			}
 		});
 		
-		//Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);
-		
 	}
 	
 	@Override
@@ -319,9 +317,6 @@ public abstract class BookDetailsAbstract extends BookEditFragmentAbstract {
 	public void onResume() {
 		Tracker.enterOnResume(this);
 		super.onResume();
-		
-		// Fix background
-		//Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);		
 		Tracker.exitOnResume(this);
 	}
 	

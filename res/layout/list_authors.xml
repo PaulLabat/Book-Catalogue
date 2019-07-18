@@ -6,8 +6,6 @@
     android:orientation="vertical"
     android:paddingLeft="@dimen/padding_border" >
 
-    <!-- android:background="@drawable/bc_background_gradient_dark" -->
-
     <TextView
         android:id="@+id/bookshelf_label"
         android:layout_width="wrap_content"

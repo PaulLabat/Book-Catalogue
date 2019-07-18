@@ -53,7 +53,7 @@ public class FieldVisibility extends BookCatalogueActivity {
 			setTitle(R.string.menu_manage_fields);
 			setContentView(R.layout.field_visibility);
 			setupFields();
-			Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);
+
 		} catch (Exception e) {
 			Logger.logError(e);
 		}
@@ -65,7 +65,7 @@ public class FieldVisibility extends BookCatalogueActivity {
 	@Override 
 	public void onResume() {
 		super.onResume();
-		Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);		
+
 	}
 
 	/**

@@ -3,7 +3,7 @@
     android:id="@+id/root"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bc_background_gradient_dim"
+
     android:orientation="vertical"
     android:padding="@dimen/padding_border" >
 
@@ -34,7 +34,8 @@
             android:text="@string/cancel" />
         <!--
     	    style="?android:attr/buttonStyleSmall"
-		    android:textAppearance="?android:attr/textAppearanceSmall" 
+		    android:textAppearance="?android:attr/textAppearanceSmall" 
+
         -->
 
         <Button
@@ -46,7 +47,8 @@
             android:text="@string/save" />
         <!--
     	    style="?android:attr/buttonStyleSmall"
-		    android:textAppearance="?android:attr/textAppearanceSmall" 
+		    android:textAppearance="?android:attr/textAppearanceSmall" 
+
         -->
 
     </LinearLayout>
@@ -64,7 +66,8 @@
         <!--
              NOTE: This view (id=body) will be EMPTIED by the activity that uses this layout
 			 DON'T ADD ANYTHING TO IT
-			 It is OK to add stuff to the ScrollView, or anywhere else in this layout.
+			 It is OK to add stuff to the ScrollView, or anywhere else in this layout.
+
         -->
 
         <LinearLayout

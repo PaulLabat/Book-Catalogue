@@ -101,7 +101,7 @@ public class BookEditLoaned extends BookEditFragmentAbstract {
 				loaned(user);
 			}
 			// Setup the background
-			Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);
+
 		} finally {
 			Tracker.exitOnCreate(this);			
 		}

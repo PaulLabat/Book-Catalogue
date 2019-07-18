@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import com.eleybourn.bookcatalogue.BookCatalogueApp;
@@ -21,7 +22,7 @@ import java.util.Locale;
  * 
  * @author pjw
  */
-public class BookCatalogueActivity extends FragmentActivity {
+public class BookCatalogueActivity extends AppCompatActivity {
     /** Last locale used so; cached so we can check if it has genuinely changed */
     private Locale mLastLocale = BookCatalogueApp.getPreferredLocale();
 

@@ -248,7 +248,7 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 		setActivityTitle();
 
 		// Setup the background
-		Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);
+
 
 		Tracker.exitOnCreate(this);
 

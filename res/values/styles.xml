@@ -108,6 +108,13 @@
     </style>
 
     <style name="BookCatalogueTheme" parent="@style/Theme.MaterialComponents">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="windowActionBar">true</item>
+        <item name="android:windowNoTitle">true</item>
+
 
     </style>
 

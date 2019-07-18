@@ -20,12 +20,14 @@
 
 package com.eleybourn.bookcatalogue;
 
-import java.util.ArrayList;
-
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+
+import androidx.appcompat.app.ActionBar;
 
 import com.eleybourn.bookcatalogue.compat.BookCatalogueActivity;
 import com.eleybourn.bookcatalogue.goodreads.GoodreadsManager;
@@ -33,7 +35,8 @@ import com.eleybourn.bookcatalogue.goodreads.GoodreadsUtils;
 import com.eleybourn.bookcatalogue.utils.AlertDialogUtils;
 import com.eleybourn.bookcatalogue.utils.AlertDialogUtils.AlertDialogItem;
 import com.eleybourn.bookcatalogue.utils.HintManager;
-import com.eleybourn.bookcatalogue.utils.Utils;
+
+import java.util.ArrayList;
 
 /**
  * Implement the 'Main Menu' for BookCatalogue. This is one of two possible start screens.
@@ -54,6 +57,8 @@ public class MainMenu extends BookCatalogueActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_ACTION_BAR);
+
 
 		// Get the preferences and extras.
 		BookCataloguePreferences prefs = BookCatalogueApp.getAppPreferences();
@@ -71,8 +76,13 @@ public class MainMenu extends BookCatalogueActivity {
 
 		// If we get here, we're meant to be in this activity.
 		setContentView(R.layout.main_menu);
-		setTitle(R.string.app_name);
-
+//		setTitle(R.string.app_name);
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			actionBar.setTitle(R.string.app_name);
+			actionBar.setSubtitle("main menu");
+			actionBar.setBackgroundDrawable(new ColorDrawable(getColor(R.color.colorPrimary)));
+		}
 		// Display/hide the 'classic' my books item
 		int classicVis;
 		if (prefs.getBoolean(BookCataloguePreferences.PREF_INCLUDE_CLASSIC_MY_BOOKS, false))
@@ -101,7 +111,6 @@ public class MainMenu extends BookCatalogueActivity {
 			HintManager.displayHint(this, R.string.hint_startup_screen, null);
 		}
 
-		Utils.initBackground(R.drawable.bc_background_gradient, this, true);
 	}
 
 	/**
@@ -122,8 +131,6 @@ public class MainMenu extends BookCatalogueActivity {
 		} else {
 			grItem.setVisibility(View.GONE);
 		}
-
-		Utils.initBackground(R.drawable.bc_background_gradient, this, true);	
 
 		/**
 		 * RELEASE: DEBUG ONLY; used when tracking a bug in android 2.1, but kept because

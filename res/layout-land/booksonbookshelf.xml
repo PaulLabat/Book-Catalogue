@@ -3,7 +3,7 @@
     android:id="@+id/root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bc_background_gradient_dim"
+
     android:orientation="vertical"
     android:paddingLeft="@dimen/padding_border" >
 
@@ -32,7 +32,8 @@
 
         <!--
 			android:layout_toRightOf="@+id/bookshelf_name"
-			android:layout_toLeftOf="@+id/bookshelf_down"        -->
+			android:layout_toLeftOf="@+id/bookshelf_down"
+        -->
 
         <TextView
             android:id="@+id/search_text"

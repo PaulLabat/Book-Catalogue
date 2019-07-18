@@ -59,7 +59,7 @@ public class AdministrationLibraryThing extends BookCatalogueActivity {
 			setTitle(R.string.library_thing);
 			setContentView(R.layout.administration_librarything);
 			setupAdmin();
-			Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);
+
 		} catch (Exception e) {
 			Logger.logError(e);
 		}
@@ -71,7 +71,7 @@ public class AdministrationLibraryThing extends BookCatalogueActivity {
 	@Override 
 	public void onResume() {
 		super.onResume();
-		Utils.initBackground(R.drawable.bc_background_gradient_dim, this, false);		
+
 	}
 
 	public void setupAdmin() {
