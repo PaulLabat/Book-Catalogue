@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -31,18 +32,23 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.viewpager.widget.ViewPager;
+
 import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
-
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.Tab;
-import com.actionbarsherlock.view.MenuItem;
 import com.eleybourn.bookcatalogue.booklist.BooklistBuilder;
 import com.eleybourn.bookcatalogue.booklist.FlattenedBooklist;
 import com.eleybourn.bookcatalogue.compat.BookCatalogueActivity;
@@ -58,6 +64,7 @@ import com.eleybourn.bookcatalogue.dialogs.TextFieldEditorFragment;
 import com.eleybourn.bookcatalogue.dialogs.TextFieldEditorFragment.OnTextFieldEditorListener;
 import com.eleybourn.bookcatalogue.utils.Logger;
 import com.eleybourn.bookcatalogue.utils.Utils;
+import com.google.android.material.tabs.TabLayout;
 //import android.app.LocalActivityManager;
 
 /**
@@ -87,35 +94,28 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 	public static final String ADDED_TITLE = "ADDED_TITLE";
 	public static final String ADDED_AUTHOR = "ADDED_AUTHOR";
 
-	/**
-	 * Standardize the names of tabs ANY NEW NAMES NEED TO BE ADDED TO
-	 * mTabNames, below
-	 */
-	private static String TAB_NAME_EDIT_BOOK = "edit_book";
-	private static String TAB_NAME_EDIT_NOTES = "edit_book_notes";
-	private static String TAB_NAME_EDIT_FRIENDS = "edit_book_friends";
-	private static String TAB_NAME_EDIT_ANTHOLOGY = "edit_book_anthology";
-
 	/** Key using in intent to start this class in read-only mode */
 	public static final String KEY_READ_ONLY = "key_read_only";
 
 	//public int mCurrentTab = 0;
 	private long mRowId;
 	private CatalogueDBAdapter mDbHelper = new CatalogueDBAdapter(this);
-	private Tab mAnthologyTab = null;
+//	private ActionBar.Tab mAnthologyTab = null;
 	private BookData mBookData;
 	private boolean mIsReadOnly;
 
 	private Button mConfirmButton;
 	private Button mCancelButton;
 
+
+	boolean isAnthology = false;
+
+
 	public void onCreate(Bundle savedInstanceState) {
 		Tracker.enterOnCreate(this);
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.book_edit_base);
-
-		final ActionBar actionBar = getSupportActionBar();
 
 		// Get the extras; we use them a lot
 		Bundle extras = getIntent().getExtras();
@@ -163,31 +163,44 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 		// Class needed for the first tab: BookEditFields except when book is
 		// exist and read-only mode enabled
 		if (mIsReadOnly) {
-			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
 			BookDetailsReadOnly details = new BookDetailsReadOnly();
 			details.setArguments(getIntent().getExtras());
 			getSupportFragmentManager().beginTransaction().replace(R.id.fragment, details).commit();
 		} else {
-			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+			//TODO create new viewpager
+/*			actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 			initTab(actionBar, new TabListener<BookEditFields>(this, TAB_NAME_EDIT_BOOK, BookEditFields.class), R.string.details,
 					R.drawable.ic_tab_edit, extras);
 			initTab(actionBar, new TabListener<BookEditNotes>(this, TAB_NAME_EDIT_NOTES, BookEditNotes.class), R.string.notes,
-					R.drawable.ic_tab_notes, extras);
+					R.drawable.ic_tab_notes, extras);*/
 			// Only show the other tabs if it is not new book, otherwise only
 			// show the first tab
 			if (mRowId > 0) {
-				initTab(actionBar, new TabListener<BookEditLoaned>(this, TAB_NAME_EDIT_FRIENDS, BookEditLoaned.class),
-						R.string.loan, R.drawable.ic_tab_friends, extras);
+				/*initTab(actionBar, new TabListener<BookEditLoaned>(this, TAB_NAME_EDIT_FRIENDS, BookEditLoaned.class),
+						R.string.loan, R.drawable.ic_tab_friends, extras);*/
 
 				// Only show the anthology tab if the book is marked as an
 				// anthology
 				if (anthology_num != 0) {
-					mAnthologyTab = initTab(actionBar, new TabListener<BookEditAnthology>(this, TAB_NAME_EDIT_ANTHOLOGY,
-							BookEditAnthology.class), R.string.edit_book_anthology, R.drawable.ic_tab_anthology, extras);
+					isAnthology = true;
+					/*mAnthologyTab = initTab(actionBar, new TabListener<BookEditAnthology>(this, TAB_NAME_EDIT_ANTHOLOGY,
+							BookEditAnthology.class), R.string.edit_book_anthology, R.drawable.ic_tab_anthology, extras);*/
 				}
 			}
-			actionBar.setSelectedNavigationItem(tabIndex);
+//			actionBar.setSelectedNavigationItem(tabIndex);
+
+			LinearLayout pagesContainer = findViewById(R.id.pages_container);
+			pagesContainer.setVisibility(View.VISIBLE);
+			ViewPager viewPager = findViewById(R.id.viewpager);
+			viewPager.setAdapter(new CustomPagerAdapter(getSupportFragmentManager(),
+					CustomPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+					isAnthology));
+
+			TabLayout tabLayout = findViewById(R.id.sliding_tabs);
+			tabLayout.setupWithViewPager(viewPager);
+
 		}
 
 		if (mIsReadOnly) {
@@ -397,7 +410,7 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 		Tracker.enterOnSaveInstanceState(this);
 		super.onSaveInstanceState(outState);
 	
-		ActionBar actionBar = this.getSupportActionBar();
+		ActionBar actionBar = getActionBar();
 
 		outState.putLong(CatalogueDBAdapter.KEY_ROWID, mRowId);
 		outState.putBundle("bookData", mBookData.getRawData());
@@ -493,14 +506,7 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 	/**
 	 * Initialize a TabSpec according to defined parameters and add it to the
 	 * TabHost.
-	 * 
-	 * @param tabHost
-	 *            parent TabHost
-	 * @param intentClass
-	 *            class for specifying intent. It`s the Activity class contained
-	 *            in this tab.
-	 * @param tabTag
-	 *            required tag of tab
+	 *
 	 * @param titleResId
 	 *            resource id of a title of the tab
 	 * @param iconResId
@@ -509,18 +515,18 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 	 *            extras for putting in the intent. If extras is null they will
 	 *            not be added.
 	 */
-	private <T extends BookCatalogueFragment> Tab initTab(ActionBar actionBar, TabListener<T> listener, int titleResId, int iconResId,
-			Bundle extras) {
+/*	private <T extends BookCatalogueFragment> ActionBar.Tab initTab(ActionBar actionBar, TabListener<T> listener, int titleResId, int iconResId,
+																	Bundle extras) {
 
 		Resources resources = getResources();
 		String tabTitle = resources.getString(titleResId);
 
-		Tab tab = actionBar.newTab().setText(tabTitle).setTabListener(listener).setTag(titleResId);
+		ActionBar.Tab tab = actionBar.newTab().setText(tabTitle).setTabListener(listener).setTag(titleResId);
 		// tab.setIcon(iconResId);
 
 		actionBar.addTab(tab);
 		return tab;
-	}
+	}*/
 
 	/**
 	 * Mark the data as dirty (or not)
@@ -586,7 +592,7 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 	 */
 	@Override
 	public void setShowAnthology(boolean showAnthology) {
-		ActionBar actionBar = this.getSupportActionBar();
+		/*ActionBar actionBar = getActionBar();
 		if (showAnthology) {
 			if (mAnthologyTab == null) {
 				mAnthologyTab = initTab(actionBar, new TabListener<BookEditAnthology>(this, TAB_NAME_EDIT_ANTHOLOGY,
@@ -599,7 +605,8 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 				mAnthologyTab = null;
 			}
 		}
-
+*/
+		isAnthology = showAnthology;
 	}
 
 	/**
@@ -609,13 +616,13 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 	 *
 	 * @param <T>		Fragment type
 	 */
-	public static class TabListener<T extends BookCatalogueFragment> implements ActionBar.TabListener {
+	/*public static class TabListener<T extends BookCatalogueFragment> implements ActionBar.TabListener {
 		private Fragment mFragment;
 		private final Activity mActivity;
 		private final String mTag;
 		private final Class<T> mClass;
 
-		/**
+
 		 * Constructor used each time a new tab is created.
 		 * 
 		 * @param activity
@@ -624,16 +631,16 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 		 *            The identifier tag for the fragment
 		 * @param clz
 		 *            The fragment's Class, used to instantiate the fragment
-		 */
+		 *
 		public TabListener(Activity activity, String tag, Class<T> clz) {
 			mActivity = activity;
 			mTag = tag;
 			mClass = clz;
 		}
 
-		/* The following are each of the ActionBar.TabListener callbacks */
-
-		public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		/* The following are each of the ActionBar.TabListener callbacks *//*
+		@Override
+		public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
 			// Check if the fragment is already initialized
 			if (mFragment == null) {
 				// If not, instantiate and add it to the activity
@@ -645,18 +652,67 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 				ft.attach(mFragment);
 			}
 		}
-
-		public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		@Override
+		public void onTabUnselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
 			if (mFragment != null) {
 				// Detach the fragment, because another one is being attached
 				ft.detach(mFragment);
 			}
 		}
-
-		public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		@Override
+		public void onTabReselected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
 			// User selected the already selected tab. Usually do nothing.
 		}
+	}*/
+
+
+	public class CustomPagerAdapter extends FragmentPagerAdapter{
+
+		int PAGE_COUNT = 3;
+		private String[] PAGE_TITLE = {getString(R.string.details),
+				getString(R.string.notes),
+				getString(R.string.loan),
+				getString(R.string.edit_book_anthology)};
+
+		public CustomPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+			super(fm, behavior);
+		}
+		public CustomPagerAdapter(@NonNull FragmentManager fm, int behavior, boolean isAnthology) {
+			super(fm, behavior);
+			if (isAnthology){
+				PAGE_COUNT++;
+			}
+		}
+
+		@NonNull
+		@Override
+		public Fragment getItem(int position) {
+			switch (position){
+				case 0:
+					return new BookEditFields();
+				case 1:
+					return new BookEditNotes();
+				case 2:
+					return new BookEditLoaned();
+				case 3:
+					return new BookEditAnthology();
+				default:
+					return new BookEditFields();
+			}
+		}
+
+		@Override
+		public int getCount() {
+			return PAGE_COUNT;
+		}
+
+		@Nullable
+		@Override
+		public CharSequence getPageTitle(int position) {
+			return PAGE_TITLE[position];
+		}
 	}
+
 
 	@Override
 	public BookData getBookData() {
@@ -679,9 +735,6 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 	/**
 	 * Validate the current data in all fields that have validators. Display any
 	 * errors.
-	 * 
-	 * @param values
-	 *            The values to use
 	 * 
 	 * @return Boolean success or failure.
 	 */
@@ -749,17 +802,17 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 					 * next action, according to the users choice.
 					 */
 					SaveAlert alert = new SaveAlert();
-					alert.setMessage(getResources().getString(R.string.duplicate_book_message));
+					alert.setMessage(getString(R.string.duplicate_book_message));
 					alert.setTitle(R.string.duplicate_book_title);
 					alert.setIcon(android.R.drawable.ic_menu_info_details);
-					alert.setButton2(this.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+					alert.setButton(AlertDialog.BUTTON_POSITIVE,getString(R.string.ok), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							updateOrCreate();
 							nextStep.success();
 							return;
 						}
 					});
-					alert.setButton(this.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+					alert.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							nextStep.failure();
 							return;
@@ -774,7 +827,6 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 		// No special actions required...just do it.
 		updateOrCreate();
 		nextStep.success();
-		return;
 	}
 
 	private class SaveAlert extends AlertDialog {
@@ -863,11 +915,12 @@ public class BookEdit extends BookCatalogueActivity implements BookEditFragmentA
 	/**
 	 * Sets title of the parent activity in the next format:<br>
 	 * <i>"title"</i>
-	 * 
-	 * @param title
+	 *
 	 */
 	private void setActivityTitle() {
-		ActionBar bar = this.getSupportActionBar();
+		ActionBar bar = getActionBar();
+		if(bar == null) return;
+
 		if (mIsReadOnly && mList != null) {
 			bar.setTitle(mBookData.getString(CatalogueDBAdapter.KEY_TITLE));
 			bar.setSubtitle(mBookData.getAuthorTextShort() + " ("

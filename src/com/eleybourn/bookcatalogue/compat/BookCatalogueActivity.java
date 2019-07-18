@@ -1,11 +1,12 @@
 package com.eleybourn.bookcatalogue.compat;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
+import androidx.fragment.app.FragmentActivity;
+
 import com.eleybourn.bookcatalogue.BookCatalogueApp;
 
 import java.util.Locale;
@@ -20,7 +21,7 @@ import java.util.Locale;
  * 
  * @author pjw
  */
-public class BookCatalogueActivity extends SherlockFragmentActivity {
+public class BookCatalogueActivity extends FragmentActivity {
     /** Last locale used so; cached so we can check if it has genuinely changed */
     private Locale mLastLocale = BookCatalogueApp.getPreferredLocale();
 
@@ -28,7 +29,7 @@ public class BookCatalogueActivity extends SherlockFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar bar = getSupportActionBar();
+        ActionBar bar = getActionBar();
         if (bar != null) {
         	// Show home, use logo (bigger) and show title
         	bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_USE_LOGO | ActionBar.DISPLAY_SHOW_TITLE);

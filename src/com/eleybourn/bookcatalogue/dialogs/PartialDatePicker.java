@@ -87,7 +87,6 @@ public class PartialDatePicker extends AlertDialog {
 	 * Constructor
 	 * 
 	 * @param context		Calling context
-	 * @param listener		Listener for dialog events
 	 */
 	protected PartialDatePicker(Context context) {
 		this(context, null, null, null);
@@ -97,7 +96,6 @@ public class PartialDatePicker extends AlertDialog {
 	 * Constructor
 	 * 
 	 * @param context		Calling context
-	 * @param listener		Listener for dialog events
 	 * @param year			Starting year
 	 * @param month			Starting month
 	 * @param day			Starting day
@@ -485,7 +483,11 @@ public class PartialDatePicker extends AlertDialog {
 	 * @param root	Root view
 	 */
     private void reorderPickers(View root) {
+		final char YEAR = 'y';
+		final char MONTH = 'M';
+		final char DAY = 'd';
         char[] order;
+
         try {
         	// This actually throws exception in some versions of Android, specifically when
         	// the locale-specific date format has the day name (EEE) in it. So we exit and
@@ -499,7 +501,7 @@ public class PartialDatePicker extends AlertDialog {
         /* Default order is {year, month, date} so if that's the order then
          * do nothing.
          */
-        if ((order[0] == DateFormat.YEAR) && (order[1] == DateFormat.MONTH)) {
+        if ((order[0] == YEAR) && (order[1] == MONTH)) {
             return;
         }
         
@@ -515,9 +517,9 @@ public class PartialDatePicker extends AlertDialog {
         parent.removeAllViews();
         // Re-add in the correct order.
         for (char c : order) {
-            if (c == DateFormat.DATE) {
+            if (c == DAY) {
                 parent.addView(d);
-            } else if (c == DateFormat.MONTH) {
+            } else if (c == MONTH) {
                 parent.addView(m);
             } else {
                 parent.addView (y);

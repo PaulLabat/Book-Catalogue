@@ -42,6 +42,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AbsListView;
@@ -59,9 +61,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.eleybourn.bookcatalogue.BooksMultitypeListHandler.BooklistChangeListener;
 import com.eleybourn.bookcatalogue.booklist.BooklistBuilder;
 import com.eleybourn.bookcatalogue.booklist.BooklistBuilder.BookRowInfo;
@@ -605,7 +604,7 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 	 * Display the passed cursor in the ListView, and change the position to targetRow.
 	 * 
 	 * @param newList		New cursor to use
-	 * @param targetPos		
+	 * @param targetRows
 	 */
 	private void displayList(BooklistPseudoCursor newList, final ArrayList<BookRowInfo> targetRows) {	
 		if (newList == null) {
@@ -761,9 +760,9 @@ public class BooksOnBookshelf extends BookCatalogueActivity implements BooklistC
 		);
 
 		if (mCurrentStyle == null)
-			this.getSupportActionBar().setSubtitle("");
+			getActionBar().setSubtitle("");
 		else
-			this.getSupportActionBar().setSubtitle(mCurrentStyle.getDisplayName());
+			getActionBar().setSubtitle(mCurrentStyle.getDisplayName());
 			
 		// Close old list
 		if (oldList != null) {

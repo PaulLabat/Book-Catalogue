@@ -44,8 +44,7 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import com.actionbarsherlock.app.SherlockFragment;
+import androidx.fragment.app.Fragment;
 import com.eleybourn.bookcatalogue.datamanager.DataManager;
 import com.eleybourn.bookcatalogue.datamanager.ValidatorException;
 import com.eleybourn.bookcatalogue.debug.Tracker;
@@ -150,9 +149,9 @@ public class Fields extends ArrayList<Fields.Field> {
 		}
 	}
 	private class FragmentContext implements FieldsContext {
-		private final WeakReference<SherlockFragment> mFragment;
-		public FragmentContext(SherlockFragment f) {
-			mFragment = new WeakReference<SherlockFragment>(f);
+		private final WeakReference<Fragment> mFragment;
+		public FragmentContext(Fragment f) {
+			mFragment = new WeakReference<Fragment>(f);
 		}
 		@Override
 		public Object dbgGetOwnerContext() {
@@ -190,10 +189,10 @@ public class Fields extends ArrayList<Fields.Field> {
 	/**
 	 * Constructor
 	 * 
-	 * @param a 	The parent fragment which contains all Views this object
+	 * @param f 	The parent fragment which contains all Views this object
 	 * 				will manage.
 	 */
-	Fields(SherlockFragment f) {
+	Fields(Fragment f) {
 		super();
 		mContext = new FragmentContext(f);
 		mPrefs = f.getActivity().getSharedPreferences("bookCatalogue", android.content.Context.MODE_PRIVATE);
@@ -270,7 +269,6 @@ public class Fields extends ArrayList<Fields.Field> {
 		 * Passed a Field and a DataManager get the column from the data manager and set the view value.
 		 * 
 		 * @param field		Field which defines the View details
-		 * @param b			Bundle with data to load.
 		 */
 		void set(Field field, DataManager data);
 
@@ -987,7 +985,6 @@ public class Fields extends ArrayList<Fields.Field> {
 
 		/**
 		 * Get the view associated with this Field, if available.
-		 * @param id	View ID.
 		 * @return		Resulting View, or null.
 		 */
 		View getView() {
@@ -1100,7 +1097,7 @@ public class Fields extends ArrayList<Fields.Field> {
 		 * Set the value of this field from the passed Bundle. Useful for getting access to 
 		 * raw data values from a saved data bundle.
 		 * 
-		 * @param c
+		 * @param b
 		 */
 		public void set(Bundle b) {
 			if (column.length() > 0 && !doNoFetch) {
@@ -1116,7 +1113,7 @@ public class Fields extends ArrayList<Fields.Field> {
 		 * Set the value of this field from the passed Bundle. Useful for getting access to 
 		 * raw data values from a saved data bundle.
 		 * 
-		 * @param c
+		 * @param data
 		 */
 		public void set(DataManager data) {
 			if (column.length() > 0 && !doNoFetch) {
@@ -1277,7 +1274,7 @@ public class Fields extends ArrayList<Fields.Field> {
 	/**
 	 * Load all fields from the passed cursor
 	 * 
-	 * @param c Cursor to load Field objects from.
+	 * @param b
 	 */
 	public void setAll(Bundle b) {
 		Iterator<Field> fi = this.iterator();
@@ -1290,7 +1287,7 @@ public class Fields extends ArrayList<Fields.Field> {
 	/**
 	 * Load all fields from the passed datamanager
 	 * 
-	 * @param c Cursor to load Field objects from.
+	 * @param data
 	 */
 	public void setAll(DataManager data) {
 		Iterator<Field> fi = this.iterator();
@@ -1303,7 +1300,7 @@ public class Fields extends ArrayList<Fields.Field> {
 	/**
 	 * Save all fields to the passed DataManager (ie. 'get' them *into* the DataManager).
 	 * 
-	 * @param c Cursor to load Field objects from.
+	 * @param data
 	 */
 	public void getAll(DataManager data) {
 		Iterator<Field> fi = this.iterator();

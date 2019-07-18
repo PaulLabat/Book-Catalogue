@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 if(project.hasProperty("BookCatalogue.signing")
         && new File(project.property("BookCatalogue.signing")).exists()) {
-    apply from: project.property("MyProject.signing");
+    apply from: project.property("MyProject.signing")
 }
 
 buildscript {
@@ -24,28 +24,38 @@ allprojects {
 }
 
 dependencies {
-    implementation 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "com.google.android.material:material:1.1.0-alpha08"
     // Compile all libraries from 'libs' folder
     implementation fileTree(include: '*.jar', dir: 'libs')
 }
 
 android {
     compileSdkVersion 29
-    buildToolsVersion '29.0.0'
+    buildToolsVersion '29.0.1'
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 179
+        versionName "5.2.2"
+    }
+
+
     lintOptions {
         disable 'MissingTranslation'
     }
-    // !!! Commented to use values from the manifest
-//    defaultConfig {
-//        minSdkVersion 7
-//        targetSdkVersion 16
-//        versionCode 169
-//    }
+
     packagingOptions {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/LICENSE.txt'
     }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -57,8 +67,5 @@ android {
             assets.srcDirs = ['assets']
         }
     }
-    defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
-    }
+
 }

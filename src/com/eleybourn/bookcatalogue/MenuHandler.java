@@ -22,10 +22,10 @@ package com.eleybourn.bookcatalogue;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.SubMenu;
 
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.SubMenu;
 import com.eleybourn.bookcatalogue.utils.Utils;
 
 /**

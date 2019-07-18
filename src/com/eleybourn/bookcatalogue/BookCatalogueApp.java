@@ -23,6 +23,7 @@ package com.eleybourn.bookcatalogue;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -32,6 +33,9 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.eleybourn.bookcatalogue.booklist.BooklistPreferencesActivity;
 import com.eleybourn.bookcatalogue.utils.Logger;
@@ -508,24 +512,44 @@ public class BookCatalogueApp extends Application {
 	 * @param message
 	 */
     public static void showNotification(int id, String title, String message, Intent i) {
-        // In this sample, we'll use the same text for the ticker and the expanded notification
-        CharSequence text = message; //getText(R.string.local_service_started);
-
-        // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.ic_stat_logo, text, System.currentTimeMillis());
-        // Auto-cancel the notification
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
         // The PendingIntent to launch our activity if the user selects this notification
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, i, 0);
 
-        // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(context, title, //getText(R.string.local_service_label),
-                       text, contentIntent);
+        createNotificationChanel();
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_NUMBER)
+				.setSmallIcon(R.drawable.ic_stat_logo)
+				.setContentTitle(title)
+				.setContentText(message)
+				.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+				.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+				.setAutoCancel(true)
+				.setContentIntent(contentIntent);
 
-        // Send the notification.
-        mNotifier.notify(id, notification);
+		NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
+		managerCompat.cancel(id);
+		managerCompat.notify(id, builder.build());
+
+
     }
+
+    private static final String NOTIFICATION_CHANNEL_NUMBER = "666";
+
+    private static void createNotificationChanel(){
+    	if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+    		CharSequence name = "BookCatalogue";
+    		String description = "BookCatalogue notification channel";
+    		int importance = NotificationManager.IMPORTANCE_DEFAULT;
+    		NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_NUMBER, name, importance);
+    		channel.setDescription(description);
+    		NotificationManagerCompat notificationManagerCompat = context.getSystemService(NotificationManagerCompat.class);
+    		if(notificationManagerCompat != null){
+    			if(notificationManagerCompat.getNotificationChannel(NOTIFICATION_CHANNEL_NUMBER) == null){
+    				notificationManagerCompat.createNotificationChannel(channel);
+				}
+			}
+		}
+	}
+
 
     /**
      * Get the current preferred locale, or null

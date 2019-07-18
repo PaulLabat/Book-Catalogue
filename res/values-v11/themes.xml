@@ -5,7 +5,7 @@
         <item name="android:background">@android:color/holo_blue_light</item>
     </style>
 
-    <style name="BcTheme" parent="@style/Theme.Sherlock">
+    <style name="BcTheme" parent="@style/BookCatalogueTheme">
         <!-- Any customizations for your app running on devices with Theme.Holo here -->
     </style>
 

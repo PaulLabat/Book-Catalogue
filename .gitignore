@@ -20,3 +20,7 @@
 /gradlew.bat
 /gradle
 
+
+# Specific API
+src/com/eleybourn/bookcatalogue/goodreads/GoodreadsApiKeys.java
+src/com/eleybourn/bookcatalogue/amazon/AmazonAppKey.java

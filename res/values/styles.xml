@@ -107,4 +107,8 @@
     <style name="languageTextEntry" parent="@style/localeBasedTextEntry">
     </style>
 
+    <style name="BookCatalogueTheme" parent="@style/Theme.MaterialComponents">
+
+    </style>
+
 </resources>
